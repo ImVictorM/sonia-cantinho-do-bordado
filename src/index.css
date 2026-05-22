@@ -1,48 +1,123 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Cormorant";
+  font-display: swap;
+  src: url("./common/assets/fonts/cormorant/CormorantGaramond-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Cormorant";
+  font-display: swap;
+  src: url("./common/assets/fonts/cormorant/CormorantGaramond-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lora";
+  font-display: swap;
+  src: url("./common/assets/fonts/lora/Lora-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lora";
+  font-display: swap;
+  src: url("./common/assets/fonts/lora/Lora-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lora";
+  font-display: swap;
+  src: url("./common/assets/fonts/lora/Lora-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Caveat";
+  font-display: swap;
+  src: url("./common/assets/fonts/caveat/Caveat-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+
 @theme {
-  /* Primary Colors */
-  --color-primary: #2563EB;
-  --color-primary-light: #60A5FA;
-  --color-primary-dark: #1E40AF;
+  --color-bg-primary: #F8F1E7;
+  --color-bg-secondary: #EFE0CC;
 
-  /* Secondary Colors */
-  --color-secondary: #64748B;
-  --color-secondary-light: #CBD5E1;
-  --color-secondary-dark: #334155;
+  --color-primary: #C97B84;
+  --color-primary-light: #d4969e;
+  --color-primary-dark: #b5636d;
 
-  /* Semantic Colors */
-  --color-success: #10B981;
-  --color-success-light: #D1FAE5;
-  --color-success-dark: #047857;
+  --color-accent: #7E9F7C;
+  --color-accent-light: #9ab898;
+  --color-accent-dark: #5f8360;
 
-  --color-warning: #F59E0B;
-  --color-warning-light: #FEF3C7;
-  --color-warning-dark: #D97706;
+  --color-complement: #6F8FAF;
 
-  --color-error: #EF4444;
-  --color-error-light: #FEE2E2;
-  --color-error-dark: #DC2626;
+  --color-detail: #D9A441;
 
-  --color-info: #3B82F6;
-  --color-info-light: #DBEAFE;
-  --color-info-dark: #1D4ED8;
+  --color-text-primary: #3F3028;
+  --color-text-secondary: #7A6252;
 
-  /* Backgrounds */
-  --color-background: #F1F5F9;
+  --font-heading: 'Cormorant', serif;
+  --font-body: 'Lora', serif;
+  --font-decorative: 'Caveat', cursive;
 
-  /* Text Colors */
-  --color-text-primary: #111827;
-  --color-text-secondary: #6B7280;
-  --color-text-light: #9CA3AF;
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
+  --animate-fade-in: fade-in 0.6s ease-out forwards;
+  --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   html, body, #root {
     @apply h-full;
   }
 
   body {
-    @apply min-h-dvh bg-background;
-  } 
+    @apply min-h-dvh bg-bg-primary font-body text-text-primary antialiased;
+  }
+
+  ::selection {
+    @apply bg-primary/30 text-text-primary;
+  }
 }
