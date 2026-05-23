@@ -41,7 +41,7 @@ export function CallToAction() {
 
           <a
             id="cta-whatsapp"
-            href={`https://wa.me/${contact.social.whatsapp.number}?text=${encodeURIComponent(contact.social.whatsapp.message)}`}
+            href={`https://wa.me/${contact.social.whatsapp.fullNumber}?text=${encodeURIComponent(contact.social.whatsapp.message)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-10 py-5 bg-white text-primary font-body font-semibold text-lg rounded-full hover:shadow-2xl hover:shadow-white/20 hover:-translate-y-1 transition-all duration-300"

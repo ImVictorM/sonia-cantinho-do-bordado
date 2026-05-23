@@ -100,8 +100,8 @@ export function Services({ id }: ServicesProps) {
             Nossos <span className="text-primary">Serviços</span>
           </h2>
           <p className="font-body text-text-secondary mt-4 max-w-2xl mx-auto">
-            Cada serviço é realizado com dedicação artesanal, utilizando
-            materiais de alta qualidade e técnicas tradicionais de bordado.
+            Cada serviço é realizado com dedicação e precisão, utilizando
+            máquinas industriais e materiais de alta qualidade.
           </p>
         </div>
 

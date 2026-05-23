@@ -1,6 +1,6 @@
 import type { Section } from "../../../common/types/Section";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
-import aboutImage from "@/common/assets/images/sobre-artesa.png";
+// import aboutImage from "@/common/assets/images/sobre-artesa.png";
 
 type AboutProps = Section & {};
 
@@ -12,32 +12,6 @@ export function About({ id }: AboutProps) {
       <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Image */}
-          <div
-            className={`relative transition-all duration-700 ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-8"
-            }`}
-          >
-            <div className="relative max-w-md mx-auto lg:max-w-none">
-              {/* Background decorative shape */}
-              <div className="absolute inset-0 bg-linear-to-tr from-accent/20 to-primary/20 rounded-3xl -rotate-3 scale-105" />
-
-              <img
-                src={aboutImage}
-                alt="Sônia em seu ateliê de bordados"
-                className="relative rounded-3xl shadow-xl w-full object-cover aspect-4/5"
-              />
-
-              {/* Floating badge */}
-              <div className="absolute -top-4 -right-4 bg-white rounded-2xl shadow-lg p-4 animate-float">
-                <p className="font-decorative text-lg text-accent">+20 anos</p>
-                <p className="font-body text-xs text-text-secondary">
-                  de experiência
-                </p>
-              </div>
-            </div>
-          </div>
 
           {/* Text */}
           <div
@@ -57,22 +31,22 @@ export function About({ id }: AboutProps) {
 
             <div className="space-y-4 font-body text-text-secondary leading-relaxed text-left">
               <p>
-                Há mais de 20 anos, transformo linhas e tecidos em obras de
-                arte. O que começou como um hobby aprendido com minha avó se
-                tornou uma paixão que dedico todos os dias da minha vida.
+                Há mais de 20 anos, trabalho com bordados personalizados, unindo
+                criatividade e tecnologia para entregar peças com acabamento
+                impecável. O que começou como uma paixão se tornou um negócio
+                dedicado à excelência.
               </p>
               <p>
-                Cada peça que sai do meu ateliê carrega não apenas um bordado,
-                mas um pedacinho da minha história e do meu coração. Trabalho
-                com materiais de alta qualidade e atenção aos mínimos detalhes,
-                porque acredito que o verdadeiro luxo está na dedicação
-                artesanal.
+                Cada peça que sai do meu ateliê é produzida com máquinas
+                industriais de alta precisão, garantindo qualidade e
+                consistência em cada detalhe. Trabalho com materiais de primeira
+                linha e atenção total ao resultado final.
               </p>
               <p>
-                Meu cantinho é onde a criatividade ganha forma, onde cada ponto
-                é dado com paciência e amor. Seja para decorar sua casa,
-                presentear alguém especial ou celebrar um momento único, estou
-                aqui para criar algo verdadeiramente especial para você.
+                Meu cantinho é onde a criatividade ganha forma, seja para
+                uniformes corporativos, presentes especiais ou peças
+                decorativas. Estou aqui para criar algo verdadeiramente especial
+                para você.
               </p>
             </div>
 

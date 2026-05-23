@@ -1,13 +1,345 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
-import { galleryItems } from "../data/gallery";
+import { galleryItems, galleryCategories } from "../data/gallery";
+import type { GalleryItem, GalleryCategoryKey } from "../data/gallery";
 import type { Section } from "../../../common/types/Section";
 
 type GalleryProps = Section & {};
 
+const INITIAL_VISIBLE_COUNT = 12;
+const LOAD_MORE_COUNT = 12;
+
+// ─── Lazy Image Component ──────────────────────────────────────────────────────
+
+function LazyImage({
+  src,
+  alt,
+  className,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+}) {
+  const imageRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const element = imageRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.unobserve(element);
+        }
+      },
+      { rootMargin: "200px 0px" }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={imageRef} className="relative w-full">
+      {/* Placeholder skeleton */}
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-primary/5 animate-pulse-soft rounded-2xl" />
+      )}
+
+      {isInView && (
+        <img
+          src={src}
+          alt={alt}
+          onLoad={() => setIsLoaded(true)}
+          className={`${className ?? ""} transition-opacity duration-500 ${
+            isLoaded ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
+    </div>
+  );
+}
+
+// ─── Gallery Card ───────────────────────────────────────────────────────────────
+
+function GalleryCard({
+  item,
+  index,
+  isVisible,
+  categoryDisplayMap,
+  onSelect,
+}: {
+  item: GalleryItem;
+  index: number;
+  isVisible: boolean;
+  categoryDisplayMap: Map<string, string>;
+  onSelect: (item: GalleryItem) => void;
+}) {
+  return (
+    <button
+      key={item.id}
+      id={`gallery-item-${item.id}`}
+      onClick={() => onSelect(item)}
+      className={`group relative w-full overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 break-inside-avoid block ${
+        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+      }`}
+      style={{
+        transitionDelay: isVisible ? `${(index % 6) * 80 + 200}ms` : "0ms",
+      }}
+      aria-label={`Ver ${item.title} em tamanho maior`}
+    >
+      <LazyImage
+        src={item.src}
+        alt={item.alt}
+        className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
+      />
+
+      {/* Hover overlay */}
+      <div className="absolute inset-0 bg-linear-to-t from-text-primary/80 via-text-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
+        <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+          <span className="inline-block font-body text-xs text-white/90 bg-primary/80 backdrop-blur-sm px-3 py-1 rounded-full mb-2">
+            {categoryDisplayMap.get(item.category) ?? item.category}
+          </span>
+          <p className="font-heading text-lg sm:text-xl font-semibold text-white leading-tight">
+            {item.title}
+          </p>
+          <p className="font-body text-xs sm:text-sm text-white/75 mt-1 line-clamp-2">
+            {item.alt}
+          </p>
+        </div>
+
+        {/* Zoom icon */}
+        <div className="absolute top-4 right-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-500 delay-100">
+          <svg
+            className="w-5 h-5 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+            />
+          </svg>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+// ─── Lightbox ───────────────────────────────────────────────────────────────────
+
+function Lightbox({
+  selectedItem,
+  categoryDisplayMap,
+  onClose,
+  onPrev,
+  onNext,
+}: {
+  selectedItem: GalleryItem;
+  categoryDisplayMap: Map<string, string>;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+}) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") onPrev();
+      if (e.key === "ArrowRight") onNext();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose, onPrev, onNext]);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
+
+  return (
+    <div
+      id="gallery-lightbox"
+      className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+      onClick={onClose}
+      role="dialog"
+      aria-label="Imagem ampliada"
+    >
+      {/* Close button */}
+      <button
+        id="lightbox-close"
+        onClick={onClose}
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 w-11 h-11 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/25 transition-all duration-300 text-white cursor-pointer group"
+        aria-label="Fechar imagem"
+      >
+        <svg
+          className="w-5 h-5 transition-transform duration-300 group-hover:rotate-90"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
+      {/* Previous button */}
+      <button
+        id="lightbox-prev"
+        onClick={(e) => {
+          e.stopPropagation();
+          onPrev();
+        }}
+        className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/25 transition-all duration-300 text-white cursor-pointer group"
+        aria-label="Imagem anterior"
+      >
+        <svg
+          className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:-translate-x-0.5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+
+      {/* Next button */}
+      <button
+        id="lightbox-next"
+        onClick={(e) => {
+          e.stopPropagation();
+          onNext();
+        }}
+        className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/25 transition-all duration-300 text-white cursor-pointer group"
+        aria-label="Próxima imagem"
+      >
+        <svg
+          className="w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 group-hover:translate-x-0.5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+
+      {/* Image container */}
+      <div
+        className="relative max-w-5xl w-full max-h-[85vh] flex flex-col items-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <img
+          src={selectedItem.src}
+          alt={selectedItem.alt}
+          className="w-auto max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl"
+        />
+
+        {/* Image info */}
+        <div className="mt-4 text-center max-w-xl">
+          <span className="inline-block font-body text-xs text-white/80 bg-primary/60 backdrop-blur-sm px-3 py-1 rounded-full mb-2">
+            {categoryDisplayMap.get(selectedItem.category) ??
+              selectedItem.category}
+          </span>
+          <h3 className="font-heading text-xl sm:text-2xl font-semibold text-white">
+            {selectedItem.title}
+          </h3>
+          <p className="font-body text-sm text-white/60 mt-1 hidden sm:block">
+            {selectedItem.alt}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Gallery Component ─────────────────────────────────────────────────────
+
 export function Gallery({ id }: GalleryProps) {
   const { ref, isVisible } = useScrollAnimation();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const [activeCategory, setActiveCategory] =
+    useState<GalleryCategoryKey>("all");
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
+
+  const sortedItems = useMemo(() => {
+    return [...galleryItems].sort((a, b) => a.order - b.order);
+  }, []);
+
+  const categoryDisplayMap = useMemo(() => {
+    return new Map(
+      galleryCategories.map((c) => [c.category, c.categoryDisplay])
+    );
+  }, []);
+
+  const filteredItems = useMemo(() => {
+    if (activeCategory === "all") return sortedItems;
+    return sortedItems.filter((item) => item.category === activeCategory);
+  }, [activeCategory, sortedItems]);
+
+  const visibleItems = useMemo(() => {
+    return filteredItems.slice(0, visibleCount);
+  }, [filteredItems, visibleCount]);
+
+  const hasMore = visibleCount < filteredItems.length;
+
+  const handleCategoryChange = useCallback((category: GalleryCategoryKey) => {
+    setActiveCategory(category);
+    setVisibleCount(INITIAL_VISIBLE_COUNT);
+  }, []);
+
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount((prev) => prev + LOAD_MORE_COUNT);
+  }, []);
+
+  const handleLightboxPrev = useCallback(() => {
+    setSelectedItem((current) => {
+      if (!current) return null;
+      const currentIndex = filteredItems.findIndex(
+        (item) => item.id === current.id
+      );
+      const prevIndex =
+        currentIndex > 0 ? currentIndex - 1 : filteredItems.length - 1;
+      return filteredItems[prevIndex];
+    });
+  }, [filteredItems]);
+
+  const handleLightboxNext = useCallback(() => {
+    setSelectedItem((current) => {
+      if (!current) return null;
+      const currentIndex = filteredItems.findIndex(
+        (item) => item.id === current.id
+      );
+      const nextIndex =
+        currentIndex < filteredItems.length - 1 ? currentIndex + 1 : 0;
+      return filteredItems[nextIndex];
+    });
+  }, [filteredItems]);
+
+  const handleLightboxClose = useCallback(() => {
+    setSelectedItem(null);
+  }, []);
 
   return (
     <>
@@ -15,7 +347,7 @@ export function Gallery({ id }: GalleryProps) {
         <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section header */}
           <div
-            className={`text-center mb-16 transition-all duration-700 ${
+            className={`text-center mb-12 transition-all duration-700 ${
               isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8"
@@ -29,75 +361,122 @@ export function Gallery({ id }: GalleryProps) {
             </h2>
             <p className="font-body text-text-secondary mt-4 max-w-2xl mx-auto">
               Confira algumas das peças que saíram do nosso ateliê. Cada uma
-              conta uma história única.
+              conta uma história única, feita com carinho e dedicação.
             </p>
           </div>
 
-          {/* Gallery grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {galleryItems.map((item, index) => (
+          {/* Category filters */}
+          <div
+            className={`flex flex-wrap justify-center gap-2 sm:gap-3 mb-12 transition-all duration-700 delay-100 ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
+            }`}
+          >
+            {galleryCategories.map(({ category, categoryDisplay }) => (
               <button
-                key={item.id}
-                id={`gallery-item-${item.id}`}
-                onClick={() => setSelectedImage(item.src)}
-                className={`group relative overflow-hidden rounded-2xl aspect-square cursor-pointer transition-all duration-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                  isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                key={category}
+                id={`gallery-filter-${category}`}
+                onClick={() => handleCategoryChange(category)}
+                className={`font-body text-sm sm:text-base px-4 py-2 rounded-full transition-all duration-300 cursor-pointer border ${
+                  activeCategory === category
+                    ? "bg-primary text-white border-primary shadow-lg shadow-primary/25"
+                    : "bg-white/60 text-text-secondary border-primary/20 hover:bg-primary/10 hover:border-primary/40 hover:text-text-primary"
                 }`}
-                style={{
-                  transitionDelay: isVisible ? `${(index + 1) * 100}ms` : "0ms",
-                }}
-                aria-label={`Ver ${item.title} em tamanho maior`}
               >
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-linear-to-t from-text-primary/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <div>
-                    <p className="font-heading text-xl font-semibold text-white">
-                      {item.title}
-                    </p>
-                    <p className="font-body text-sm text-white/80 mt-1">
-                      {item.alt}
-                    </p>
-                  </div>
-                </div>
+                {categoryDisplay}
               </button>
             ))}
           </div>
+
+          {/* Results counter */}
+          <div
+            className={`text-center mb-8 transition-all duration-500 ${
+              isVisible ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <p className="font-body text-sm text-text-secondary">
+              Exibindo{" "}
+              <span className="font-semibold text-text-primary">
+                {visibleItems.length}
+              </span>{" "}
+              de{" "}
+              <span className="font-semibold text-text-primary">
+                {filteredItems.length}
+              </span>{" "}
+              {filteredItems.length === 1 ? "trabalho" : "trabalhos"}
+              {activeCategory !== "all" && (
+                <span>
+                  {" "}
+                  em{" "}
+                  <span className="text-primary font-semibold">
+                    {categoryDisplayMap.get(activeCategory)}
+                  </span>
+                </span>
+              )}
+            </p>
+          </div>
+
+          {/* Gallery masonry grid */}
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
+            {visibleItems.map((item, index) => (
+              <GalleryCard
+                key={item.id}
+                item={item}
+                index={index}
+                isVisible={isVisible}
+                categoryDisplayMap={categoryDisplayMap}
+                onSelect={setSelectedItem}
+              />
+            ))}
+          </div>
+
+          {/* Empty state */}
+          {filteredItems.length === 0 && (
+            <div className="text-center py-16">
+              <p className="font-body text-text-secondary text-lg">
+                Nenhum trabalho encontrado nesta categoria.
+              </p>
+            </div>
+          )}
+
+          {/* Load more button */}
+          {hasMore && (
+            <div className="text-center mt-12">
+              <button
+                id="gallery-load-more"
+                onClick={handleLoadMore}
+                className="group font-body inline-flex items-center gap-2 px-8 py-3.5 bg-white/70 text-text-primary border border-primary/30 rounded-full hover:bg-primary hover:text-white hover:border-primary transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg hover:shadow-primary/20"
+              >
+                <span>Ver mais trabalhos</span>
+                <svg
+                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Lightbox */}
-      {selectedImage && (
-        <div
-          id="gallery-lightbox"
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
-          onClick={() => setSelectedImage(null)}
-          role="dialog"
-          aria-label="Imagem ampliada"
-        >
-          <div
-            className="relative max-w-4xl w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={selectedImage}
-              alt="Bordado em destaque"
-              className="w-full h-auto max-h-[85vh] object-contain rounded-2xl shadow-2xl"
-            />
-            <button
-              id="lightbox-close"
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-3 -right-3 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary hover:text-white transition-colors duration-300 text-text-primary font-bold"
-              aria-label="Fechar imagem"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
+      {selectedItem && (
+        <Lightbox
+          selectedItem={selectedItem}
+          categoryDisplayMap={categoryDisplayMap}
+          onClose={handleLightboxClose}
+          onPrev={handleLightboxPrev}
+          onNext={handleLightboxNext}
+        />
       )}
     </>
   );

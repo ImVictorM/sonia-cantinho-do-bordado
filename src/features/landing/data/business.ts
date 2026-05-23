@@ -1,45 +1,40 @@
-type TimePeriod = "AM" | "PM";
+type Meridiem = "AM" | "PM";
 
-type BusinessHours = {
-  weekdays: {
-    start: {
-      time: number;
-      period: TimePeriod;
-    };
-    end: {
-      time: number;
-      period: TimePeriod;
-    };
-  };
+type ClockTime = {
+  hour: number;
+  period: Meridiem;
+};
+
+type BusinessHourRange = {
+  start: ClockTime;
+  end: ClockTime;
+};
+
+type WeeklyBusinessHours = {
+  weekdays: BusinessHourRange;
   weekends: {
-    saturday: {
-      start: number;
-      end: number;
-    };
-    sunday: null | {
-      start: number;
-      end: number;
-    };
+    saturday: BusinessHourRange;
+    sunday: null | BusinessHourRange;
   };
+};
+
+type Address = {
+  street: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  zip: string;
 };
 
 type BusinessLocation = {
-  address: {
-    street: string;
-    neighborhood: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
-  businessHours: BusinessHours;
+  address: Address;
+  businessHours: WeeklyBusinessHours;
 };
 
-export type Artisan = {
-  phone: {
-    countryCode: string;
-    areaCode: string;
-    number: string;
-  };
+type Phone = {
+  countryCode: string;
+  areaCode: string;
+  number: string;
 };
 
 export type Brand = {
@@ -51,9 +46,8 @@ export type Contact = {
   email: string;
   social: {
     instagram: string;
-    facebook: string;
-    whatsapp: {
-      number: string;
+    whatsapp: Phone & {
+      fullNumber: string;
       message: string;
     };
   };
@@ -61,25 +55,23 @@ export type Contact = {
 
 export const brand: Brand = {
   name: "Sônia Cantinho do Bordado",
-  tagline: "Bordados com Amor e Delicadeza",
+  tagline: "Bordados Personalizados com Qualidade Profissional",
 };
 
-export const artisan: Artisan = {
-  phone: {
-    countryCode: "55",
-    areaCode: "19",
-    number: "989164583",
-  },
+const phone = {
+  countryCode: "55",
+  areaCode: "19",
+  number: "989164583",
 };
 
 export const contact: Contact = {
-  email: "contato@soniacantinhodobordado.com.br",
+  email: "mariamendesemanu@gmail.com",
 
   social: {
     instagram: "https://instagram.com/soniacantinhodobordado",
-    facebook: "https://facebook.com/soniacantinhodobordado",
     whatsapp: {
-      number: `${artisan.phone.countryCode}${artisan.phone.areaCode}${artisan.phone.number}`,
+      ...phone,
+      fullNumber: `${phone.countryCode}${phone.areaCode}${phone.number}`,
       message: "Olá! Gostaria de saber mais sobre os bordados.",
     },
   },
@@ -87,28 +79,34 @@ export const contact: Contact = {
 
 export const businessLocation: BusinessLocation = {
   address: {
-    street: "Rua das Flores, 123",
-    neighborhood: "Centro",
-    city: "Campinas",
+    street: "[rua], [numero]",
+    neighborhood: "[bairro]",
+    city: "Limeira",
     state: "SP",
-    zip: "13010-000",
+    zip: "[cep]",
   },
 
   businessHours: {
     weekdays: {
       start: {
-        time: 9,
+        hour: 9,
         period: "AM",
       },
       end: {
-        time: 6,
+        hour: 6,
         period: "PM",
       },
     },
     weekends: {
       saturday: {
-        start: 9,
-        end: 13,
+        start: {
+          hour: 9,
+          period: "AM",
+        },
+        end: {
+          hour: 1,
+          period: "PM",
+        },
       },
       sunday: null,
     },

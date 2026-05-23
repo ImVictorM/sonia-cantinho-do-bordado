@@ -1,7 +1,8 @@
 import type { Section } from "../../../common/types/Section";
 import { contact } from "../data/business";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
-import heroImage from "@/common/assets/images/hero-bordado.png";
+import heroImage from "@/common/assets/images/hero.png";
+import { landingPageSections } from "../landingPageSections";
 
 type HeroProps = Section & {};
 
@@ -29,30 +30,32 @@ export function Hero({ id }: HeroProps) {
             }`}
           >
             <span className="font-decorative text-xl text-accent inline-block">
-              feito com amor ✿
+              qualidade profissional ✿
             </span>
 
             <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-bold text-text-primary leading-tight">
-              Bordados com <span className="text-primary">Amor</span> e{" "}
-              <span className="text-accent">Delicadeza</span>
+              Bordados Personalizados com{" "}
+              <span className="text-primary">Qualidade</span> e{" "}
+              <span className="text-accent">Precisão</span>
             </h1>
 
             <p className="font-body text-lg text-text-secondary max-w-lg mx-auto lg:mx-0 leading-relaxed">
-              Peças únicas feitas à mão, com carinho e dedicação. Cada ponto
-              conta uma história, cada bordado carrega um pedacinho de amor.
+              Bordados personalizados para uniformes, presentes e peças
+              especiais. Produção com máquinas industriais e acabamento de
+              qualidade.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
               <a
                 id="hero-cta-gallery"
-                href="#galeria"
+                href={`#${landingPageSections.gallery.id}`}
                 className="inline-flex items-center justify-center px-8 py-4 bg-primary text-white font-body font-medium rounded-full hover:bg-primary-dark transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5"
               >
                 Conheça Nossos Trabalhos
               </a>
               <a
                 id="hero-cta-whatsapp"
-                href={`https://wa.me/${contact.social.whatsapp.number}?text=${encodeURIComponent(contact.social.whatsapp.message)}`}
+                href={`https://wa.me/${contact.social.whatsapp.fullNumber}?text=${encodeURIComponent(contact.social.whatsapp.message)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-8 py-4 border-2 border-accent text-accent font-body font-medium rounded-full hover:bg-accent hover:text-white transition-all duration-300"
@@ -70,7 +73,6 @@ export function Hero({ id }: HeroProps) {
             </div>
           </div>
 
-          {/* Hero image */}
           <div
             className={`relative transition-all duration-700 delay-300 ${
               isVisible
@@ -79,19 +81,17 @@ export function Hero({ id }: HeroProps) {
             }`}
           >
             <div className="relative max-w-md mx-auto lg:max-w-none">
-              {/* Background decorative shape */}
               <div className="absolute inset-0 bg-linear-to-br from-primary/20 to-accent/20 rounded-3xl rotate-3 scale-105" />
 
               <img
                 src={heroImage}
-                alt="Bordados artesanais feitos à mão por Sônia"
+                alt="Bordados personalizados com acabamento profissional"
                 className="relative rounded-3xl shadow-2xl w-full object-cover aspect-4/5 lg:aspect-3/4"
               />
 
-              {/* Floating badge */}
               <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-lg p-4 animate-float">
                 <p className="font-decorative text-lg text-primary">
-                  +500 peças
+                  +100 peças
                 </p>
                 <p className="font-body text-xs text-text-secondary">
                   bordadas com amor
@@ -100,23 +100,6 @@ export function Hero({ id }: HeroProps) {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-        <svg
-          className="w-6 h-6 text-text-secondary/60"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
-        </svg>
       </div>
     </section>
   );
