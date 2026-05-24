@@ -73,7 +73,7 @@
   --font-decorative: 'Caveat', cursive;
 
   --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
-  --animate-fade-in: fade-in 0.6s ease-out forwards;
+  --animate-fade-in: fade-in 0.25s ease-out forwards;
   --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
   --animate-float: float 3s ease-in-out infinite;
   --animate-ken-burns: ken-burns 15s ease-in-out infinite alternate;

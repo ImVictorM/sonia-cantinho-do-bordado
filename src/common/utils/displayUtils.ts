@@ -15,5 +15,5 @@ function to24HourClock(time: ClockTime) {
   }
 }
 export function toDisplayBusinessHours(hours: BusinessHourRange) {
-  return `Das ${to24HourClock(hours.start)} às ${to24HourClock(hours.end)}`;
+  return `${to24HourClock(hours.start)}hrs às ${to24HourClock(hours.end)}hrs`;
 }

@@ -25,65 +25,72 @@ export default function Header({ homeId, sections }: HeaderProps) {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
           ? isMobileMenuOpen
-            ? "transition-none bg-bg-primary py-5"
-            : "bg-bg-primary/85 backdrop-blur-lg shadow-md py-3"
+            ? "transition-none bg-bg-primary pb-5"
+            : "bg-bg-primary/85 backdrop-blur-lg shadow-md pb-3"
           : isMobileMenuOpen
-            ? "transition-none bg-bg-primary py-5"
-            : "bg-transparent py-5"
+            ? "transition-none bg-bg-primary pb-5"
+            : "bg-transparent pb-5"
       }`}
+      style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        <a
-          href={`#${homeId}`}
-          className="font-heading text-xl sm:text-2xl font-bold text-primary tracking-wide hover:text-primary-dark transition-colors duration-300"
-        >
-          {brand.name}
-        </a>
+      <div
+        className={`transition-all duration-500 ${
+          isScrolled && !isMobileMenuOpen ? "pt-3" : "pt-5"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          <a
+            href={`#${homeId}`}
+            className="font-heading text-xl sm:text-2xl font-bold text-primary tracking-wide hover:text-primary-dark transition-colors duration-300"
+          >
+            {brand.name}
+          </a>
 
-        {/* Desktop */}
-        <nav
-          className="hidden md:flex items-center gap-8"
-          aria-label="Navegação principal"
-        >
-          {sections.map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              className={`${isScrolled ? "text-text-primary" : "text-primary"} font-body text-sm hover:text-primary transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full`}
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+          {/* Desktop */}
+          <nav
+            className="hidden md:flex items-center gap-8"
+            aria-label="Navegação principal"
+          >
+            {sections.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className={`${isScrolled ? "text-text-primary" : "text-primary"} font-body text-sm hover:text-primary transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full`}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
 
-        {/* Mobile menu button */}
-        <button
-          id="mobile-menu-toggle"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden cursor-pointer flex flex-col  gap-1.5 p-2 relative z-50"
-          aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
-          aria-expanded={isMobileMenuOpen}
-        >
-          <span
-            className={`block w-6 h-0.5  transition-all duration-300 origin-center ${
-              isMobileMenuOpen
-                ? "rotate-45 translate-y-2 bg-text-primary"
-                : "bg-primary"
-            }`}
-          />
-          <span
-            className={`block w-6 h-0.5  transition-all duration-300 ${
-              isMobileMenuOpen ? "opacity-0 bg-text-primary" : "bg-primary"
-            }`}
-          />
-          <span
-            className={`block w-6 h-0.5  transition-all duration-300 origin-center ${
-              isMobileMenuOpen
-                ? "-rotate-45 -translate-y-2 bg-text-primary"
-                : "bg-primary"
-            }`}
-          />
-        </button>
+          {/* Mobile menu button */}
+          <button
+            id="mobile-menu-toggle"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden cursor-pointer flex flex-col gap-1.5 p-2 relative z-50"
+            aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={isMobileMenuOpen}
+          >
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 origin-center ${
+                isMobileMenuOpen
+                  ? "rotate-45 translate-y-2 bg-text-primary"
+                  : "bg-primary"
+              }`}
+            />
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 ${
+                isMobileMenuOpen ? "opacity-0 bg-text-primary" : "bg-primary"
+              }`}
+            />
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 origin-center ${
+                isMobileMenuOpen
+                  ? "-rotate-45 -translate-y-2 bg-text-primary"
+                  : "bg-primary"
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}

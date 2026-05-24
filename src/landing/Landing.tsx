@@ -12,7 +12,7 @@ import Contact from "./sections/Contact/Contact";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-bg-primary">
+    <div className="min-h-screen bg-bg-primary overflow-x-hidden">
       <Header homeId={landingNavigation.home.id} sections={landingSections} />
       <main>
         <Hero

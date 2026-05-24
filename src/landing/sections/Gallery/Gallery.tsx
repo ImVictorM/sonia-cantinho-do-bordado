@@ -92,9 +92,10 @@ export default function Gallery({ id }: WithId) {
 
   return (
     <>
-      <section id={id} className="py-24 bg-bg-secondary">
-        <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id={id} className="pt-12 pb-24 sm:pt-24 bg-bg-secondary">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
+            ref={ref}
             className={`text-center mb-12 transition-all duration-700 ${
               isVisible
                 ? "opacity-100 translate-y-0"

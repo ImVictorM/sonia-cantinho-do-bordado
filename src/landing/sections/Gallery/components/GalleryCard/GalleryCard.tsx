@@ -51,7 +51,7 @@ export default function GalleryCard({
         transitionDelay: shouldShow
           ? isNewItem
             ? `${(index % delay) * 80}ms`
-            : `${(index % 6) * 80 + 200}ms`
+            : `${(index % 6) * 60 + 100}ms`
           : "0ms",
       }}
       aria-label={`Ver ${item.title} em tamanho maior`}
