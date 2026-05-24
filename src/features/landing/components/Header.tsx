@@ -5,6 +5,7 @@ import type { LandingPageSection } from "../landingPageSections";
 type HeaderProps = {
   sections: LandingPageSection;
 };
+
 export function Header({ sections }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,12 +27,15 @@ export function Header({ sections }: HeaderProps) {
       id="header"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-bg-primary/85 backdrop-blur-lg shadow-md py-3"
-          : "bg-transparent py-5"
+          ? isMobileMenuOpen
+            ? "transition-none bg-bg-primary py-5"
+            : "bg-bg-primary/85 backdrop-blur-lg shadow-md py-3"
+          : isMobileMenuOpen
+            ? "transition-none bg-bg-primary py-5"
+            : "bg-transparent py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Logo */}
         <a
           href={`#${sections.home.id}`}
           className="font-heading text-xl sm:text-2xl font-bold text-primary tracking-wide hover:text-primary-dark transition-colors duration-300"
@@ -48,7 +52,7 @@ export function Header({ sections }: HeaderProps) {
             <a
               key={item.id}
               href={`#${item.id}`}
-              className="font-body text-sm text-text-secondary hover:text-primary transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+              className={`${isScrolled ? "text-text-primary" : "text-primary"} font-body text-sm hover:text-primary transition-colors duration-300 relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full`}
             >
               {item.label}
             </a>
@@ -59,23 +63,27 @@ export function Header({ sections }: HeaderProps) {
         <button
           id="mobile-menu-toggle"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-2 relative z-50"
+          className="md:hidden cursor-pointer flex flex-col  gap-1.5 p-2 relative z-50"
           aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
           aria-expanded={isMobileMenuOpen}
         >
           <span
-            className={`block w-6 h-0.5 bg-text-primary transition-all duration-300 origin-center ${
-              isMobileMenuOpen ? "rotate-45 translate-y-2" : ""
+            className={`block w-6 h-0.5  transition-all duration-300 origin-center ${
+              isMobileMenuOpen
+                ? "rotate-45 translate-y-2 bg-text-primary"
+                : "bg-primary"
             }`}
           />
           <span
-            className={`block w-6 h-0.5 bg-text-primary transition-all duration-300 ${
-              isMobileMenuOpen ? "opacity-0" : ""
+            className={`block w-6 h-0.5  transition-all duration-300 ${
+              isMobileMenuOpen ? "opacity-0 bg-text-primary" : "bg-primary"
             }`}
           />
           <span
-            className={`block w-6 h-0.5 bg-text-primary transition-all duration-300 origin-center ${
-              isMobileMenuOpen ? "-rotate-45 -translate-y-2" : ""
+            className={`block w-6 h-0.5  transition-all duration-300 origin-center ${
+              isMobileMenuOpen
+                ? "-rotate-45 -translate-y-2 bg-text-primary"
+                : "bg-primary"
             }`}
           />
         </button>
@@ -96,7 +104,7 @@ export function Header({ sections }: HeaderProps) {
               key={item.id}
               href={`#${item.id}`}
               onClick={handleNavClick}
-              className="font-body text-text-secondary hover:text-primary transition-colors duration-300 py-3 border-b border-bg-secondary/50 last:border-b-0"
+              className={`${isScrolled ? "text-text-secondary" : "text-text-primary"} font-body hover:text-primary transition-colors duration-300 py-3 border-b border-bg-secondary/50 last:border-b-0`}
             >
               {item.label}
             </a>

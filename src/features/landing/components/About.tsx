@@ -1,6 +1,6 @@
 import type { Section } from "../../../common/types/Section";
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
-// import aboutImage from "@/common/assets/images/sobre-artesa.png";
+import aboutImage from "@/common/assets/images/collage.png";
 
 type AboutProps = Section & {};
 
@@ -12,6 +12,23 @@ export function About({ id }: AboutProps) {
       <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Image */}
+          <div
+            className={`relative transition-all duration-700 ${
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-8"
+            }`}
+          >
+            <div className="relative max-w-md mx-auto lg:max-w-none">
+              <div className="absolute inset-0 bg-linear-to-br from-primary/20 to-accent/20 rounded-3xl rotate-3 scale-105" />
+
+              <img
+                src={aboutImage}
+                alt="Collage de bordados personalizados mostrando variedade de trabalhos"
+                className="relative rounded-3xl shadow-2xl w-full object-cover"
+              />
+            </div>
+          </div>
 
           {/* Text */}
           <div

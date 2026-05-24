@@ -76,6 +76,7 @@
   --animate-fade-in: fade-in 0.6s ease-out forwards;
   --animate-pulse-soft: pulse-soft 2s ease-in-out infinite;
   --animate-float: float 3s ease-in-out infinite;
+  --animate-ken-burns: ken-burns 15s ease-in-out infinite alternate;
 }
 
 @keyframes fade-in-up {
@@ -102,6 +103,11 @@
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
+}
+
+@keyframes ken-burns {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.15) translate(-2%, -1%); }
 }
 
 @layer base {
