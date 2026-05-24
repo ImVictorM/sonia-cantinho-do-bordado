@@ -25,7 +25,7 @@ export const address: Address = {
 export const contact: Contact = {
   email: "mariamendesemanu@gmail.com",
   social: {
-    instagram: "https://instagram.com/soniacantinhodobordado",
+    instagram: "https://www.instagram.com/atelie_cantinho_do_bordado/",
     whatsapp: {
       ...phone,
       fullNumber: `${phone.countryCode}${phone.areaCode}${phone.number}`,
@@ -37,7 +37,7 @@ export const contact: Contact = {
 export const weeklyBusinessHours: WeeklyBusinessHours = {
   weekdays: {
     start: {
-      hour: 9,
+      hour: 8,
       period: "AM",
     },
     end: {
@@ -46,16 +46,7 @@ export const weeklyBusinessHours: WeeklyBusinessHours = {
     },
   },
   weekends: {
-    saturday: {
-      start: {
-        hour: 9,
-        period: "AM",
-      },
-      end: {
-        hour: 1,
-        period: "PM",
-      },
-    },
+    saturday: null,
     sunday: null,
   },
 };

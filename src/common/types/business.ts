@@ -13,7 +13,7 @@ export type BusinessHourRange = {
 export type WeeklyBusinessHours = {
   weekdays: BusinessHourRange;
   weekends: {
-    saturday: BusinessHourRange;
-    sunday: null | BusinessHourRange;
+    saturday: BusinessHourRange | null;
+    sunday: BusinessHourRange | null;
   };
 };

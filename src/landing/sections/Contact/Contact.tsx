@@ -1,13 +1,11 @@
 import { useState, type SubmitEvent } from "react";
 import { useScrollAnimation } from "@/common/hooks/useScrollAnimation";
-import { weeklyBusinessHours, contact, address } from "@/common/data/settings";
-import {
-  toDisplayPhone,
-  toDisplayBusinessHours,
-} from "@/common/utils/displayUtils";
+import { contact, address } from "@/common/data/settings";
+import { toDisplayPhone } from "@/common/utils/displayUtils";
 import { InstagramIcon } from "@/common/assets/icons/InstagramIcon";
 import { WhatsAppIcon } from "@/common/assets/icons/WhatsAppIcon";
 import type { WithId } from "@/common/types/extension";
+import { BusinessHours } from "@/common/ui/BusinessHours";
 
 export default function Contact({ id }: WithId) {
   const { ref, isVisible } = useScrollAnimation();
@@ -236,10 +234,7 @@ export default function Contact({ id }: WithId) {
                 <h4 className="font-heading text-lg font-semibold text-text-primary">
                   Horário
                 </h4>
-                <div className="font-body text-text-secondary">
-                  <p>{`Seg a sex: ${toDisplayBusinessHours(weeklyBusinessHours.weekdays)}`}</p>
-                  <p>{`Sáb: ${toDisplayBusinessHours(weeklyBusinessHours.weekends.saturday)}`}</p>
-                </div>
+                <BusinessHours className="font-body text-text-secondary" />
               </div>
             </div>
 

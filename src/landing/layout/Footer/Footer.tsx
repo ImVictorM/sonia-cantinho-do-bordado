@@ -1,16 +1,9 @@
-import {
-  toDisplayPhone,
-  toDisplayBusinessHours,
-} from "@/common/utils/displayUtils";
-import {
-  brand,
-  contact,
-  address,
-  weeklyBusinessHours,
-} from "@/common/data/settings";
+import { toDisplayPhone } from "@/common/utils/displayUtils";
+import { brand, contact, address } from "@/common/data/settings";
 import { WhatsAppIcon } from "@/common/assets/icons/WhatsAppIcon";
 import { InstagramIcon } from "@/common/assets/icons/InstagramIcon";
 import type { Section } from "@/common/types/section";
+import { BusinessHours } from "@/common/ui/BusinessHours";
 
 type FooterProps = {
   sections: Section[];
@@ -63,18 +56,7 @@ export default function Footer({ sections }: FooterProps) {
                 <br />
                 {address.city} – {address.state}
               </p>
-              <div>
-                <p>
-                  Seg a sex:{" "}
-                  {toDisplayBusinessHours(weeklyBusinessHours.weekdays)}
-                </p>
-                <p>
-                  Sáb:{" "}
-                  {toDisplayBusinessHours(
-                    weeklyBusinessHours.weekends.saturday,
-                  )}
-                </p>
-              </div>
+              <BusinessHours />
             </div>
 
             <div className="flex gap-3 pt-2">
