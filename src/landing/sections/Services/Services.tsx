@@ -77,6 +77,36 @@ const serviceIcons: Record<string, ReactNode> = {
       <path d="M24 14c0 0 6-8 10-6s-2 6-10 6" strokeLinecap="round" />
     </svg>
   ),
+  uniform: (
+    <svg
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    >
+      <path d="M16 6h16" strokeLinecap="round" />
+      <path
+        d="M16 6l-10 8 6 4 4-4v28h16V14l4 4 6-4-10-8"
+        strokeLinejoin="round"
+      />
+      <path d="M20 6c0 2 2 4 4 4s4-2 4-4" strokeLinecap="round" />
+    </svg>
+  ),
+  patch: (
+    <svg
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    >
+      <rect x="10" y="10" width="28" height="28" rx="6" />
+      <rect x="16" y="16" width="16" height="16" rx="3" strokeDasharray="3 2" />
+      <path d="M24 20v8" strokeLinecap="round" />
+      <path d="M20 24h8" strokeLinecap="round" />
+    </svg>
+  ),
 };
 
 export default function Services({ id }: WithId) {
@@ -91,18 +121,19 @@ export default function Services({ id }: WithId) {
           }`}
         >
           <span className="font-decorative text-xl text-accent">
-            o que eu faço
+            especialidades
           </span>
           <h2 className="font-heading text-4xl sm:text-5xl font-bold text-text-primary mt-2">
-            Nossos <span className="text-primary">Serviços</span>
+            Qualidade e <span className="text-primary">Excelência</span> em Cada
+            Serviço
           </h2>
           <p className="font-body text-text-secondary mt-4 max-w-2xl mx-auto">
-            Cada serviço é realizado com dedicação e precisão, utilizando
-            máquinas industriais e materiais de alta qualidade.
+            Do personalizado ao corporativo, cada projeto é executado com
+            precisão e atenção artesanal aos detalhes.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div
               key={service.id}

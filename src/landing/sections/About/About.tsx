@@ -35,31 +35,29 @@ export default function About({ id }: WithId) {
             }`}
           >
             <span className="font-decorative text-xl text-primary inline-block">
-              conheça minha história
+              paixão em cada ponto
             </span>
 
             <h2 className="font-heading text-4xl sm:text-5xl font-bold text-text-primary">
-              Sobre o <span className="text-primary">Cantinho</span>
+              Arte e <span className="text-primary">Precisão</span> em Cada Detalhe
             </h2>
 
             <div className="space-y-4 font-body text-text-secondary leading-relaxed text-left">
               <p>
-                Há mais de 20 anos, trabalho com bordados personalizados, unindo
-                criatividade e tecnologia para entregar peças com acabamento
-                impecável. O que começou como uma paixão se tornou um negócio
-                dedicado à excelência.
+                Aqui no Cantinho do Bordado, cada peça é tratada como uma obra
+                única. Unimos domínio técnico e sensibilidade criativa para
+                transformar tecidos em peças com identidade e acabamento
+                impecável.
               </p>
               <p>
-                Cada peça que sai do meu ateliê é produzida com máquinas
-                industriais de alta precisão, garantindo qualidade e
-                consistência em cada detalhe. Trabalho com materiais de primeira
-                linha e atenção total ao resultado final.
+                Utilizamos máquinas industriais de alta precisão e materiais
+                selecionados criteriosamente, garantindo um padrão de qualidade
+                que se destaca em cada ponto, cada linha e cada detalhe.
               </p>
               <p>
-                Meu cantinho é onde a criatividade ganha forma, seja para
-                uniformes corporativos, presentes especiais ou peças
-                decorativas. Estou aqui para criar algo verdadeiramente especial
-                para você.
+                De uniformes corporativos a presentes inesquecíveis, nosso
+                ateliê é especializado em dar vida às suas ideias com
+                excelência. Seu projeto merece um acabamento à altura.
               </p>
             </div>
 

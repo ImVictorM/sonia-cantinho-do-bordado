@@ -29,8 +29,8 @@ export default function Footer({ sections }: FooterProps) {
               bordados com qualidade profissional ✿
             </p>
             <p className="font-body text-sm text-white/60 leading-relaxed">
-              Bordados personalizados com máquinas industriais há mais de 20
-              anos.
+              Bordados personalizados para uniformes, presentes e peças
+              especiais.
             </p>
           </div>
 
@@ -51,7 +51,6 @@ export default function Footer({ sections }: FooterProps) {
             </nav>
           </div>
 
-          {/* Contact */}
           <div className="space-y-4">
             <h4 className="font-heading text-lg font-semibold text-white">
               Contato
@@ -64,10 +63,18 @@ export default function Footer({ sections }: FooterProps) {
                 <br />
                 {address.city} – {address.state}
               </p>
-              <p>
-                {toDisplayBusinessHours(weeklyBusinessHours.weekdays)} –{" "}
-                {toDisplayBusinessHours(weeklyBusinessHours.weekdays)}
-              </p>
+              <div>
+                <p>
+                  Seg a sex:{" "}
+                  {toDisplayBusinessHours(weeklyBusinessHours.weekdays)}
+                </p>
+                <p>
+                  Sáb:{" "}
+                  {toDisplayBusinessHours(
+                    weeklyBusinessHours.weekends.saturday,
+                  )}
+                </p>
+              </div>
             </div>
 
             <div className="flex gap-3 pt-2">

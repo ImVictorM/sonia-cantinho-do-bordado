@@ -236,12 +236,10 @@ export default function Contact({ id }: WithId) {
                 <h4 className="font-heading text-lg font-semibold text-text-primary">
                   Horário
                 </h4>
-                <p className="font-body text-text-secondary">
-                  {toDisplayBusinessHours(weeklyBusinessHours.weekdays)} -{" "}
-                  {toDisplayBusinessHours(
-                    weeklyBusinessHours.weekends.saturday,
-                  )}
-                </p>
+                <div className="font-body text-text-secondary">
+                  <p>{`Seg a sex: ${toDisplayBusinessHours(weeklyBusinessHours.weekdays)}`}</p>
+                  <p>{`Sáb: ${toDisplayBusinessHours(weeklyBusinessHours.weekends.saturday)}`}</p>
+                </div>
               </div>
             </div>
 
