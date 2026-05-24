@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useScrollAnimation } from "@/common/hooks/useScrollAnimation";
+import { useSwipe } from "@/common/hooks/useSwipe";
 import { testimonials } from "./data/testimonials";
 import type { WithId } from "@/common/types/extension";
 
@@ -17,6 +18,12 @@ export default function Testimonials({ id }: WithId) {
       (prev) => (prev - 1 + testimonials.length) % testimonials.length,
     );
   };
+
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: nextSlide,
+    onSwipeRight: prevSlide,
+    threshold: 40,
+  });
 
   useEffect(() => {
     if (isPaused) return;
@@ -49,7 +56,7 @@ export default function Testimonials({ id }: WithId) {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-lg relative overflow-hidden">
+          <div {...swipeHandlers} className="bg-white rounded-3xl p-8 sm:p-12 shadow-lg relative overflow-hidden">
             <svg
               className="absolute top-6 left-6 w-12 h-12 text-primary/10"
               fill="currentColor"

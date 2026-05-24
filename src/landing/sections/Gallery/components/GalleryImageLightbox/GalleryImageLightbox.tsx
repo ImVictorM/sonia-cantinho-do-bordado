@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { GalleryItem } from "../../data/gallery";
+import { useSwipe } from "@/common/hooks/useSwipe";
 
 export default function Lightbox({
   selectedItem,
@@ -14,6 +15,12 @@ export default function Lightbox({
   onPrev: () => void;
   onNext: () => void;
 }) {
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: onNext,
+    onSwipeRight: onPrev,
+    threshold: 40,
+  });
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -39,6 +46,7 @@ export default function Lightbox({
       onClick={onClose}
       role="dialog"
       aria-label="Imagem ampliada"
+      {...swipeHandlers}
     >
       <button
         id="lightbox-close"
