@@ -9,6 +9,10 @@ type GalleryProps = Section & {};
 const INITIAL_VISIBLE_COUNT = 12;
 const LOAD_MORE_COUNT = 12;
 
+const SKELETON_IMAGE = `data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><rect width="100%" height="100%" fill="var(--color-bg-primary)"/></svg>`,
+)}`;
+
 // ─── Lazy Image Component ──────────────────────────────────────────────────────
 
 function LazyImage({
@@ -35,7 +39,7 @@ function LazyImage({
           observer.unobserve(element);
         }
       },
-      { rootMargin: "200px 0px" }
+      { rootMargin: "200px 0px" },
     );
 
     observer.observe(element);
@@ -43,10 +47,17 @@ function LazyImage({
   }, []);
 
   return (
-    <div ref={imageRef} className="relative w-full">
-      {/* Placeholder skeleton */}
+    <div
+      ref={imageRef}
+      className="relative w-full rounded-2xl overflow-hidden bg-bg-primary"
+    >
+      {/* Placeholder skeleton image */}
       {!isLoaded && (
-        <div className="absolute inset-0 bg-primary/5 animate-pulse-soft rounded-2xl" />
+        <img
+          src={SKELETON_IMAGE}
+          alt="Carregando..."
+          className="w-full h-auto block animate-pulse-soft opacity-70"
+        />
       )}
 
       {isInView && (
@@ -55,7 +66,9 @@ function LazyImage({
           alt={alt}
           onLoad={() => setIsLoaded(true)}
           className={`${className ?? ""} transition-opacity duration-500 ${
-            isLoaded ? "opacity-100" : "opacity-0"
+            isLoaded
+              ? "opacity-100 relative"
+              : "opacity-0 absolute inset-0 w-full h-full object-cover"
           }`}
         />
       )}
@@ -69,25 +82,47 @@ function GalleryCard({
   item,
   index,
   isVisible,
+  isNewItem,
   categoryDisplayMap,
   onSelect,
 }: {
   item: GalleryItem;
   index: number;
   isVisible: boolean;
+  isNewItem: boolean;
   categoryDisplayMap: Map<string, string>;
   onSelect: (item: GalleryItem) => void;
 }) {
+  const cardRef = useRef<HTMLButtonElement>(null);
+  const [hasAnimated, setHasAnimated] = useState(!isNewItem);
+
+  useEffect(() => {
+    if (!isNewItem) return;
+    // Trigger the entrance animation after a brief delay
+    const timer = setTimeout(() => {
+      setHasAnimated(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [isNewItem]);
+
+  const shouldShow = isVisible && (isNewItem ? hasAnimated : true);
+
   return (
     <button
-      key={item.id}
+      ref={cardRef}
       id={`gallery-item-${item.id}`}
       onClick={() => onSelect(item)}
-      className={`group relative w-full overflow-hidden rounded-2xl cursor-pointer transition-all duration-700 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 break-inside-avoid block ${
-        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-      }`}
+      className={`group relative w-full overflow-hidden rounded-2xl cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 block ${
+        shouldShow
+          ? "opacity-100 translate-y-0 scale-100"
+          : "opacity-0 translate-y-6 scale-95"
+      } ${isNewItem ? "duration-500 ease-out" : "duration-700"}`}
       style={{
-        transitionDelay: isVisible ? `${(index % 6) * 80 + 200}ms` : "0ms",
+        transitionDelay: shouldShow
+          ? isNewItem
+            ? `${(index % LOAD_MORE_COUNT) * 80}ms`
+            : `${(index % 6) * 80 + 200}ms`
+          : "0ms",
       }}
       aria-label={`Ver ${item.title} em tamanho maior`}
     >
@@ -274,6 +309,37 @@ function Lightbox({
   );
 }
 
+// ─── Column Distribution Hook ───────────────────────────────────────────────────
+
+function useColumnCount() {
+  const [columnCount, setColumnCount] = useState(() => {
+    if (typeof window === "undefined") return 3;
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 3;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setColumnCount(width < 640 ? 1 : width < 1024 ? 2 : 3);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return columnCount;
+}
+
+function distributeToColumns<T>(items: T[], columnCount: number): T[][] {
+  const columns: T[][] = Array.from({ length: columnCount }, () => []);
+  items.forEach((item, index) => {
+    columns[index % columnCount].push(item);
+  });
+  return columns;
+}
+
 // ─── Main Gallery Component ─────────────────────────────────────────────────────
 
 export function Gallery({ id }: GalleryProps) {
@@ -282,6 +348,10 @@ export function Gallery({ id }: GalleryProps) {
   const [activeCategory, setActiveCategory] =
     useState<GalleryCategoryKey>("all");
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT);
+  const [newItemStartIndex, setNewItemStartIndex] = useState(
+    INITIAL_VISIBLE_COUNT,
+  );
+  const columnCount = useColumnCount();
 
   const sortedItems = useMemo(() => {
     return [...galleryItems].sort((a, b) => a.order - b.order);
@@ -289,7 +359,7 @@ export function Gallery({ id }: GalleryProps) {
 
   const categoryDisplayMap = useMemo(() => {
     return new Map(
-      galleryCategories.map((c) => [c.category, c.categoryDisplay])
+      galleryCategories.map((c) => [c.category, c.categoryDisplay]),
     );
   }, []);
 
@@ -302,22 +372,28 @@ export function Gallery({ id }: GalleryProps) {
     return filteredItems.slice(0, visibleCount);
   }, [filteredItems, visibleCount]);
 
+  const columns = useMemo(() => {
+    return distributeToColumns(visibleItems, columnCount);
+  }, [visibleItems, columnCount]);
+
   const hasMore = visibleCount < filteredItems.length;
 
   const handleCategoryChange = useCallback((category: GalleryCategoryKey) => {
     setActiveCategory(category);
     setVisibleCount(INITIAL_VISIBLE_COUNT);
+    setNewItemStartIndex(0); // Reset so all items animate in on category change
   }, []);
 
   const handleLoadMore = useCallback(() => {
+    setNewItemStartIndex(visibleCount);
     setVisibleCount((prev) => prev + LOAD_MORE_COUNT);
-  }, []);
+  }, [visibleCount]);
 
   const handleLightboxPrev = useCallback(() => {
     setSelectedItem((current) => {
       if (!current) return null;
       const currentIndex = filteredItems.findIndex(
-        (item) => item.id === current.id
+        (item) => item.id === current.id,
       );
       const prevIndex =
         currentIndex > 0 ? currentIndex - 1 : filteredItems.length - 1;
@@ -329,7 +405,7 @@ export function Gallery({ id }: GalleryProps) {
     setSelectedItem((current) => {
       if (!current) return null;
       const currentIndex = filteredItems.findIndex(
-        (item) => item.id === current.id
+        (item) => item.id === current.id,
       );
       const nextIndex =
         currentIndex < filteredItems.length - 1 ? currentIndex + 1 : 0;
@@ -417,17 +493,25 @@ export function Gallery({ id }: GalleryProps) {
             </p>
           </div>
 
-          {/* Gallery masonry grid */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
-            {visibleItems.map((item, index) => (
-              <GalleryCard
-                key={item.id}
-                item={item}
-                index={index}
-                isVisible={isVisible}
-                categoryDisplayMap={categoryDisplayMap}
-                onSelect={setSelectedItem}
-              />
+          {/* Gallery masonry grid - manual columns to prevent repositioning */}
+          <div className="flex gap-5">
+            {columns.map((columnItems, colIndex) => (
+              <div key={colIndex} className="flex-1 flex flex-col gap-5">
+                {columnItems.map((item) => {
+                  const globalIndex = visibleItems.indexOf(item);
+                  return (
+                    <GalleryCard
+                      key={item.id}
+                      item={item}
+                      index={globalIndex}
+                      isVisible={isVisible}
+                      isNewItem={globalIndex >= newItemStartIndex}
+                      categoryDisplayMap={categoryDisplayMap}
+                      onSelect={setSelectedItem}
+                    />
+                  );
+                })}
+              </div>
             ))}
           </div>
 
