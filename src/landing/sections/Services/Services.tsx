@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { useScrollAnimation } from "@/common/hooks/useScrollAnimation";
 import { services } from "./data/services";
 import type { WithId } from "@/common/types/extension";
@@ -111,6 +111,20 @@ const serviceIcons: Record<string, ReactNode> = {
 
 export default function Services({ id }: WithId) {
   const { ref, isVisible } = useScrollAnimation();
+  const [entranceDone, setEntranceDone] = useState(false);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    // Wait for the last card's entrance animation to finish
+    // (last card delay + transition duration)
+    const lastCardDelay = services.length * 150;
+    const transitionDuration = 500;
+    const timer = setTimeout(
+      () => setEntranceDone(true),
+      lastCardDelay + transitionDuration,
+    );
+    return () => clearTimeout(timer);
+  }, [isVisible]);
 
   return (
     <section id={id} className="py-24 bg-bg-primary">
@@ -143,7 +157,10 @@ export default function Services({ id }: WithId) {
                   : "opacity-0 translate-y-8"
               }`}
               style={{
-                transitionDelay: isVisible ? `${(index + 1) * 150}ms` : "0ms",
+                transitionDelay:
+                  !entranceDone && isVisible
+                    ? `${(index + 1) * 150}ms`
+                    : "0ms",
               }}
             >
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 mb-6">
@@ -164,3 +181,4 @@ export default function Services({ id }: WithId) {
     </section>
   );
 }
+
