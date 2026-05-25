@@ -6,6 +6,7 @@ import { InstagramIcon } from "@/common/assets/icons/InstagramIcon";
 import { WhatsAppIcon } from "@/common/assets/icons/WhatsAppIcon";
 import type { WithId } from "@/common/types/extension";
 import { BusinessHours } from "@/common/ui/BusinessHours";
+import { sendEmail } from "./services/emailService";
 
 export default function Contact({ id }: WithId) {
   const { ref, isVisible } = useScrollAnimation();
@@ -16,10 +17,19 @@ export default function Contact({ id }: WithId) {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const result = await sendEmail(formData);
+
+    if (result.success) {
+      alert("Mensagem enviada com sucesso!");
+    } else {
+      alert(
+        "Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente.",
+      );
+    }
+
     setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
     setFormData({ name: "", email: "", message: "" });
   };
 
