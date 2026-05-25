@@ -6,11 +6,7 @@ type LazyImageProps = {
   className?: string;
 };
 
-export default function LazyImage({
-  src,
-  alt,
-  className,
-}: LazyImageProps) {
+export default function LazyImage({ src, alt, className }: LazyImageProps) {
   const imageRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -19,15 +15,12 @@ export default function LazyImage({
     const element = imageRef.current;
     if (!element) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(element);
-        }
-      },
-      { rootMargin: "300px" },
-    );
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsInView(true);
+        observer.unobserve(element);
+      }
+    });
 
     observer.observe(element);
     return () => observer.disconnect();
@@ -49,7 +42,6 @@ export default function LazyImage({
               background:
                 "linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 50%, var(--color-bg-primary) 100%)",
               backgroundSize: "200% 200%",
-              animation: "shimmer 1.8s ease-in-out infinite",
             }}
           />
         </div>

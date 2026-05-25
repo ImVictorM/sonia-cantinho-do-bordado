@@ -11,8 +11,6 @@ import type { WithId } from "@/common/types/extension";
 const INITIAL_VISIBLE_COUNT = 12;
 const LOAD_MORE_COUNT = 12;
 
-
-
 export default function Gallery({ id }: WithId) {
   const { ref, isVisible } = useScrollAnimation();
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
@@ -90,11 +88,7 @@ export default function Gallery({ id }: WithId) {
 
   return (
     <>
-      <section
-        id={id}
-        ref={ref}
-        className="pt-12 pb-24 sm:pt-24 bg-bg-secondary"
-      >
+      <section id={id} ref={ref} className="py-12 sm:py-24 bg-bg-secondary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`text-center mb-12 transition-all duration-700 ${
