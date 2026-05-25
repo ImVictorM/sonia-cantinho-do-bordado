@@ -15,12 +15,15 @@ export default function LazyImage({ src, alt, className }: LazyImageProps) {
     const element = imageRef.current;
     if (!element) return;
 
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsInView(true);
-        observer.unobserve(element);
-      }
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.unobserve(element);
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
 
     observer.observe(element);
     return () => observer.disconnect();
