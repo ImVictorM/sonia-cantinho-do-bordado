@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { brand } from "@/common/data/settings";
-import type { Section } from "@/common/types/section";
+import type { Section } from "@/common/types/ui";
 
 type HeaderProps = {
   homeId: string;

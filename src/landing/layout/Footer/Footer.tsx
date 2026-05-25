@@ -2,7 +2,7 @@ import { toDisplayPhone } from "@/common/utils/displayUtils";
 import { brand, contact, address } from "@/common/data/settings";
 import { WhatsAppIcon } from "@/common/assets/icons/WhatsAppIcon";
 import { InstagramIcon } from "@/common/assets/icons/InstagramIcon";
-import type { Section } from "@/common/types/section";
+import type { Section } from "@/common/types/ui";
 import { BusinessHours } from "@/common/ui/BusinessHours";
 
 type FooterProps = {

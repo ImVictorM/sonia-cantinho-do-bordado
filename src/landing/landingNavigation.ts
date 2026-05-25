@@ -1,4 +1,4 @@
-import type { Section } from "@/common/types/section";
+import type { Section } from "@/common/types/ui";
 
 export type LandingNavigation = {
   home: Section;
