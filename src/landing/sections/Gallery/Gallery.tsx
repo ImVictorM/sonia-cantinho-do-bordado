@@ -11,9 +11,7 @@ import type { WithId } from "@/common/types/extension";
 const INITIAL_VISIBLE_COUNT = 12;
 const LOAD_MORE_COUNT = 12;
 
-const SKELETON_IMAGE = `data:image/svg+xml,${encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><rect width="100%" height="100%" fill="var(--color-bg-primary)"/></svg>`,
-)}`;
+
 
 export default function Gallery({ id }: WithId) {
   const { ref, isVisible } = useScrollAnimation();
@@ -92,10 +90,13 @@ export default function Gallery({ id }: WithId) {
 
   return (
     <>
-      <section id={id} className="pt-12 pb-24 sm:pt-24 bg-bg-secondary">
+      <section
+        id={id}
+        ref={ref}
+        className="pt-12 pb-24 sm:pt-24 bg-bg-secondary"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            ref={ref}
             className={`text-center mb-12 transition-all duration-700 ${
               isVisible
                 ? "opacity-100 translate-y-0"
@@ -180,7 +181,6 @@ export default function Gallery({ id }: WithId) {
                       isNewItem={globalIndex >= newItemStartIndex}
                       categoryDisplayMap={categoryDisplayMap}
                       onSelect={setSelectedItem}
-                      skeletonSrc={SKELETON_IMAGE}
                     />
                   );
                 })}

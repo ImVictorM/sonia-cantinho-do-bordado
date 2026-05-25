@@ -8,7 +8,6 @@ type GalleryCardProps = {
   isVisible: boolean;
   isNewItem: boolean;
   delay?: number;
-  skeletonSrc?: string;
   categoryDisplayMap: Map<string, string>;
   onSelect: (item: GalleryItem) => void;
 };
@@ -20,7 +19,6 @@ export default function GalleryCard({
   isNewItem,
   categoryDisplayMap,
   delay = 12,
-  skeletonSrc,
   onSelect,
 }: GalleryCardProps) {
   const cardRef = useRef<HTMLButtonElement>(null);
@@ -60,7 +58,6 @@ export default function GalleryCard({
         src={item.src}
         alt={item.alt}
         className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
-        skeletonSrc={skeletonSrc}
       />
 
       {/* Hover overlay */}
