@@ -1,26 +1,39 @@
-export const testimonials = [
+type Testimonial = {
+  id: number;
+  name: string;
+  text: string;
+  rating: number;
+};
+
+export const testimonials: Testimonial[] = [
   {
     id: 1,
-    name: "Maria Clara",
-    text: "As toalhas que a Sônia bordou para o meu casamento ficaram simplesmente perfeitas! O acabamento é impecável e todos os convidados elogiaram.",
+    name: "Patrícia Félix",
+    text: "Quero deixar meu elogio pelo trabalho incrível que você faz. Os bordados são lindos, feitos com muito capricho e atenção aos detalhes. A costura também é impecável, tudo muito bem feito e com muito carinho. Dá pra ver o amor e dedicação em cada peça ♡ Obrigada!",
     rating: 5,
   },
   {
     id: 2,
-    name: "Ana Paula",
-    text: "Encomendei o enxoval completo do meu bebê e superou todas as minhas expectativas. A qualidade do bordado é incrível e a Sônia é uma pessoa maravilhosa!",
+    name: "Vanda",
+    text: "Profissional nota 10! Faz as coisas com compromisso e carinho. Um trabalho excelente. Fiquei surpresa com o trabalho dela.",
     rating: 5,
   },
   {
     id: 3,
-    name: "Fernanda Lima",
-    text: "Presente mais lindo que já dei para minha mãe! As toalhas bordadas ficaram um verdadeiro luxo. Recomendo de olhos fechados!",
+    name: "Gabriel Scalabrini",
+    text: "Dona Sônia, obrigado pelos bordados! Ficaram sensacionais. Já vamos providenciar mais blusas para fazermos mais. Ficou perfeito!",
     rating: 5,
   },
   {
     id: 4,
-    name: "Juliana Santos",
-    text: "Já fiz várias encomendas com a Sônia e sempre fico encantada com o resultado. Qualidade profissional e atenção a cada detalhe!",
+    name: "Diely Beatriz",
+    text: "Amei! Excelente trabalho, bordado do jeitinho que eu queria. Sucesso sempre ♡♡",
     rating: 5,
   },
-] as const;
+  {
+    id: 5,
+    name: "Eliane - Clínica Lomos",
+    text: "Trabalho feito com excelência e muito capricho. Super indico para vocês!",
+    rating: 5,
+  },
+];

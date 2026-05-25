@@ -45,7 +45,7 @@ export default function Testimonials({ id }: WithId) {
             depoimentos
           </span>
           <h2 className="font-heading text-4xl sm:text-5xl font-bold text-text-primary mt-2">
-            O Que Nossas <span className="text-primary">Clientes</span> Dizem
+            O Que Nossos <span className="text-primary">Clientes</span> Dizem
           </h2>
         </div>
 
@@ -56,7 +56,10 @@ export default function Testimonials({ id }: WithId) {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div {...swipeHandlers} className="bg-white rounded-3xl p-8 sm:p-12 shadow-lg relative overflow-hidden">
+          <div
+            {...swipeHandlers}
+            className="bg-white rounded-3xl p-8 sm:p-12 shadow-lg relative overflow-hidden"
+          >
             <svg
               className="absolute top-6 left-6 w-12 h-12 text-primary/10"
               fill="currentColor"

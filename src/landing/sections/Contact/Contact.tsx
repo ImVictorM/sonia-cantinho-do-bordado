@@ -206,9 +206,11 @@ export default function Contact({ id }: WithId) {
                   Endereço
                 </h4>
                 <p className="font-body text-text-secondary">
-                  {address.street}, {address.neighborhood}
+                  {address.street}, {address.number}
                   <br />
-                  {address.city} – {address.state}, {address.zip}
+                  {address.neighborhood}
+                  <br />
+                  {address.city} – {address.state}
                 </p>
               </div>
             </div>

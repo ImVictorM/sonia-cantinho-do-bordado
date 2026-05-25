@@ -15,11 +15,11 @@ const phone: Phone = {
 };
 
 export const address: Address = {
-  street: "[rua], [numero]",
-  neighborhood: "[bairro]",
+  street: "Rua João Martins Cardoso",
+  number: "29",
+  neighborhood: "Jardim São Lourenço ",
   city: "Limeira",
   state: "SP",
-  zip: "[cep]",
 };
 
 export const contact: Contact = {

@@ -22,8 +22,8 @@ export default function Landing() {
         <About id={landingNavigation.about.id} />
         <Services id={landingNavigation.services.id} />
         <Gallery id={landingNavigation.gallery.id} />
-        <Testimonials id={landingNavigation.testimonials.id} />
         <CallToAction />
+        <Testimonials id={landingNavigation.testimonials.id} />
         <Contact id={landingNavigation.contact.id} />
       </main>
       <Footer sections={landingSections} />
