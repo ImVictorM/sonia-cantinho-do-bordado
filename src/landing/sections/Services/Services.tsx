@@ -1,0 +1,184 @@
+import { useState, useEffect, type ReactNode } from "react";
+import { useScrollAnimation } from "@/common/hooks/useScrollAnimation";
+import { services } from "./data/services";
+import type { WithId } from "@/common/types/extension";
+
+const serviceIcons: Record<string, ReactNode> = {
+  needle: (
+    <svg
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    >
+      <path d="M24 4v28" strokeLinecap="round" />
+      <circle cx="24" cy="6" r="2" fill="currentColor" />
+      <path d="M24 32c0 6-4 12-4 12" strokeLinecap="round" />
+      <path d="M24 32c0 6 4 12 4 12" strokeLinecap="round" />
+      <path d="M18 18l12 4" strokeLinecap="round" strokeDasharray="2 3" />
+      <path d="M18 26l12-4" strokeLinecap="round" strokeDasharray="2 3" />
+    </svg>
+  ),
+  baby: (
+    <svg
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    >
+      <circle cx="24" cy="16" r="10" />
+      <path
+        d="M18 14a1.5 1.5 0 103 0 1.5 1.5 0 10-3 0"
+        fill="currentColor"
+        stroke="none"
+      />
+      <path
+        d="M27 14a1.5 1.5 0 103 0 1.5 1.5 0 10-3 0"
+        fill="currentColor"
+        stroke="none"
+      />
+      <path d="M21 19c0 0 1.5 2 3 2s3-2 3-2" strokeLinecap="round" />
+      <path d="M14 26c-2 4-2 8-2 14h24c0-6 0-10-2-14" strokeLinecap="round" />
+      <path d="M20 26v6" strokeLinecap="round" strokeDasharray="2 2" />
+      <path d="M28 26v6" strokeLinecap="round" strokeDasharray="2 2" />
+    </svg>
+  ),
+  towel: (
+    <svg
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    >
+      <rect x="8" y="6" width="32" height="36" rx="3" />
+      <path d="M8 14h32" />
+      <path d="M8 34h32" />
+      <path d="M16 14v20" strokeDasharray="2 3" />
+      <path d="M24 14v20" strokeDasharray="2 3" />
+      <path d="M32 14v20" strokeDasharray="2 3" />
+      <circle cx="24" cy="24" r="4" strokeDasharray="2 2" />
+    </svg>
+  ),
+  gift: (
+    <svg
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    >
+      <rect x="6" y="20" width="36" height="22" rx="3" />
+      <rect x="4" y="14" width="40" height="8" rx="3" />
+      <path d="M24 14v28" />
+      <path d="M24 14c0 0-6-8-10-6s2 6 10 6" strokeLinecap="round" />
+      <path d="M24 14c0 0 6-8 10-6s-2 6-10 6" strokeLinecap="round" />
+    </svg>
+  ),
+  uniform: (
+    <svg
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    >
+      <path d="M16 6h16" strokeLinecap="round" />
+      <path
+        d="M16 6l-10 8 6 4 4-4v28h16V14l4 4 6-4-10-8"
+        strokeLinejoin="round"
+      />
+      <path d="M20 6c0 2 2 4 4 4s4-2 4-4" strokeLinecap="round" />
+    </svg>
+  ),
+  patch: (
+    <svg
+      className="w-8 h-8"
+      fill="none"
+      viewBox="0 0 48 48"
+      stroke="currentColor"
+      strokeWidth={1.5}
+    >
+      <rect x="10" y="10" width="28" height="28" rx="6" />
+      <rect x="16" y="16" width="16" height="16" rx="3" strokeDasharray="3 2" />
+      <path d="M24 20v8" strokeLinecap="round" />
+      <path d="M20 24h8" strokeLinecap="round" />
+    </svg>
+  ),
+};
+
+export default function Services({ id }: WithId) {
+  const { ref, isVisible } = useScrollAnimation();
+  const [entranceDone, setEntranceDone] = useState(false);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    // Wait for the last card's entrance animation to finish
+    // (last card delay + transition duration)
+    const lastCardDelay = services.length * 150;
+    const transitionDuration = 500;
+    const timer = setTimeout(
+      () => setEntranceDone(true),
+      lastCardDelay + transitionDuration,
+    );
+    return () => clearTimeout(timer);
+  }, [isVisible]);
+
+  return (
+    <section id={id} className="py-24 bg-bg-primary">
+      <div ref={ref} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          className={`text-center mb-16 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <span className="font-decorative text-xl text-accent">
+            especialidades
+          </span>
+          <h2 className="font-heading text-4xl sm:text-5xl font-bold text-text-primary mt-2">
+            Qualidade e <span className="text-primary">Excelência</span> em Cada
+            Serviço
+          </h2>
+          <p className="font-body text-text-secondary mt-4 max-w-2xl mx-auto">
+            Do personalizado ao corporativo, cada projeto é executado com
+            precisão e atenção artesanal aos detalhes.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service, index) => (
+            <div
+              key={service.id}
+              className={`group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-bg-secondary/50 hover:border-primary/30 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+              style={{
+                transitionDelay:
+                  !entranceDone && isVisible
+                    ? `${(index + 1) * 150}ms`
+                    : "0ms",
+              }}
+            >
+              <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 mb-6">
+                {serviceIcons[service.icon]}
+              </div>
+
+              <h3 className="font-heading text-2xl font-semibold text-text-primary mb-3">
+                {service.title}
+              </h3>
+
+              <p className="font-body text-text-secondary leading-relaxed">
+                {service.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
