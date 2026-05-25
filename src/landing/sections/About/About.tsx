@@ -1,6 +1,7 @@
 import { useScrollAnimation } from "@/common/hooks/useScrollAnimation";
-import aboutImage from "@/common/assets/images/collage.png";
+import aboutImage from "@/common/assets/images/collage.webp";
 import type { WithId } from "@/common/types/extension";
+import { LazyImage } from "@/common/ui/LazyImage";
 
 export default function About({ id }: WithId) {
   const { ref, isVisible } = useScrollAnimation();
@@ -19,7 +20,7 @@ export default function About({ id }: WithId) {
             <div className="relative max-w-md mx-auto lg:max-w-none">
               <div className="absolute inset-0 bg-linear-to-br from-primary/20 to-accent/20 rounded-3xl rotate-3 scale-105" />
 
-              <img
+              <LazyImage
                 src={aboutImage}
                 alt="Collage de bordados personalizados mostrando variedade de trabalhos"
                 className="relative rounded-3xl shadow-2xl w-full object-cover"

@@ -2,7 +2,7 @@ import type { WithId } from "../../../common/types/extension";
 import { contact } from "../../../common/data/settings";
 import { useScrollAnimation } from "../../../common/hooks/useScrollAnimation";
 import heroVideo from "@/common/assets/videos/hero-bg.webm";
-import heroPoster from "@/common/assets/images/hero-poster.jpg";
+import heroPoster from "@/common/assets/images/hero-poster.webp";
 import { WhatsAppIcon } from "@/common/assets/icons/WhatsAppIcon";
 
 type HeroProps = {
