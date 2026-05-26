@@ -51,13 +51,13 @@ export default function Hero({ id, galleryId }: WithId<HeroProps>) {
             qualidade profissional ✿
           </span>
 
-          <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight">
+          <h1 className="font-heading text-[min(5rem,10vw)] font-bold text-white leading-tight">
             Bordados Personalizados com{" "}
             <span className="text-primary-light">Qualidade</span> e{" "}
             <span className="text-accent-light">Precisão</span>
           </h1>
 
-          <p className="font-body text-lg sm:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+          <p className="font-body text-base sm:text-lg md:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
             Bordados personalizados para uniformes, presentes e peças especiais.
             Produção com máquinas industriais e acabamento de qualidade.
           </p>
