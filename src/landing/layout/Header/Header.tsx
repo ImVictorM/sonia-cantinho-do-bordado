@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { brand } from "@/common/data/settings";
 import type { Section } from "@/common/types/ui";
+import logo from "@/common/assets/images/logo-360x120.webp";
 
 type HeaderProps = {
   homeId: string;
@@ -38,12 +39,16 @@ export default function Header({ homeId, sections }: HeaderProps) {
           isScrolled && !isMobileMenuOpen ? "pt-3" : "pt-5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div className="max-w-7xl gap-2 mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <a
             href={`#${homeId}`}
             className="font-heading text-xl sm:text-2xl font-bold text-primary tracking-wide hover:text-primary-dark transition-colors duration-300"
           >
-            {brand.name}
+            <img
+              src={logo}
+              alt={`${brand.name} logo`}
+              className="w-45 sm:w-50 inline-block"
+            />
           </a>
 
           {/* Desktop */}

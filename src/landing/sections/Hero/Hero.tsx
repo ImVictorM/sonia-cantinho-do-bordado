@@ -28,11 +28,6 @@ export default function Hero({ id, galleryId }: WithId<HeroProps>) {
         <source src={heroVideo} type="video/webm" />
       </video>
 
-      <div
-        className="absolute inset-0 md:hidden bg-cover bg-center animate-ken-burns"
-        style={{ backgroundImage: `url(${heroPoster})` }}
-      />
-
       <div className="absolute inset-0 bg-linear-to-b from-text-primary/90 via-text-primary/80 to-text-primary/90" />
 
       <div className="absolute top-20 -right-20 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
