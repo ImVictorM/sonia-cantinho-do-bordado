@@ -3,8 +3,10 @@ import type { Contact, Phone } from "../types/contact";
 import type { Address } from "../types/location";
 import type { WeeklyBusinessHours } from "../types/business";
 
+export const SITE_URL = "https://www.cantinhodosbordados.com.br";
+
 export const brand: Brand = {
-  name: "Sônia Cantinho do Bordado",
+  name: "Cantinho dos Bordados",
   tagline: "Bordados Personalizados com Qualidade Profissional",
 };
 

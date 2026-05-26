@@ -6,7 +6,7 @@ export function toDisplayPhone({ areaCode, number }: Phone) {
   return `(${areaCode}) ${number.slice(0, 5)}-${number.slice(5)}`;
 }
 
-function to24HourClock(time: ClockTime) {
+export function to24HourClock(time: ClockTime) {
   switch (time.period) {
     case "AM":
       return time.hour === 12 ? 0 : time.hour;
