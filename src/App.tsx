@@ -1,5 +1,5 @@
 import { Landing } from "./landing";
-import { SEO } from "./common/ui/SEO";
+import SEO from "./SEO";
 
 function App() {
   return (
