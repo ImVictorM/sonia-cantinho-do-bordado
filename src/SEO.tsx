@@ -1,63 +1,8 @@
-import {
-  brand,
-  contact,
-  address,
-  weeklyBusinessHours,
-  SITE_URL,
-} from "@/common/data/settings";
-import { to24HourClock } from "@/common/utils/displayUtils";
-
-function getOpenDays(): string[] {
-  const days: string[] = [];
-
-  days.push("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-
-  if (weeklyBusinessHours.weekends?.saturday) {
-    days.push("Saturday");
-  }
-
-  if (weeklyBusinessHours.weekends?.sunday) {
-    days.push("Sunday");
-  }
-
-  return days;
-}
-
-function buildJsonLd() {
-  const { weekdays } = weeklyBusinessHours;
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: brand.name,
-    description: `${brand.tagline}. Produção com máquinas industriais para uniformes, presentes, enxovais e peças especiais.`,
-    url: SITE_URL,
-    telephone: `+${contact.social.whatsapp.fullNumber}`,
-    email: contact.email,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: `${address.street}, ${address.number}`,
-      addressLocality: address.city,
-      addressRegion: address.state,
-      addressCountry: "BR",
-      neighborhood: address.neighborhood.trim(),
-    },
-    ...(weekdays && {
-      openingHoursSpecification: {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: getOpenDays(),
-        opens: `${to24HourClock(weekdays.start)}:00`,
-        closes: `${to24HourClock(weekdays.end)}:00`,
-      },
-    }),
-    sameAs: [contact.social.instagram],
-    image: `${SITE_URL}/og-image.webp`,
-    priceRange: "$$",
-  };
-}
+import { brand, address, SITE_URL } from "@/common/data/settings";
+import { buildJsonLdFromSettings } from "./common/utils/seoUtils";
 
 export default function SEO() {
-  const jsonLd = buildJsonLd();
+  const jsonLd = buildJsonLdFromSettings();
 
   return (
     <>
@@ -92,6 +37,12 @@ export default function SEO() {
         content={`${brand.tagline} em ${address.city}/${address.state}.`}
       />
       <meta name="twitter:image" content={`${SITE_URL}/og-image.webp`} />
+      <meta
+        name="robots"
+        content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+      />
+      <meta name="geo.region" content="BR-SP" />
+      <meta name="geo.placename" content="Limeira" />
 
       {/* Structured Data */}
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
